@@ -9,7 +9,7 @@ public class HomeRestController {
     @RequestMapping(value = "/resthello")
     String hello() {
         return """
-                Hello.aaa
+                Hello.
                 It works!
                 現在時刻は%sです。
                 """.formatted(LocalDateTime.now());
