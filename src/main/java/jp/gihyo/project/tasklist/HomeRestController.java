@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class HomeRestController {
@@ -36,6 +37,11 @@ public class HomeRestController {
         return "タスクを追加しました。";
     }
 
-
-    //TODO タスクを一覧表示するエンドポイント
+    //タスクを一覧表示するエンドポイント
+    @GetMapping("/restlist")
+    String listItems() {
+        //taskItemの中身をStringのカンマつなぎのデータに変換
+        String result = taskItems.stream().map(TaskItem::toString).collect(Collectors.joining(", "));
+        return result;
+    }
 }
