@@ -1,5 +1,6 @@
 package jp.gihyo.project.tasklist;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,14 @@ import java.util.UUID;
 
 @Controller
 public class HomeController {
+
+    private final TaskListDao dao;
+
+    //初期化用コンストラクタ
+    @Autowired
+    HomeController(TaskListDao dao) {
+        this.dao = dao;
+    }
     @RequestMapping("/hello")       //"~/hello"というパスに対するエンドポイントとして指定
     //@ResponseBody                   //戻り値としてビューを表すオブジェクトを返す
     String hello(Model model) {
@@ -25,6 +34,7 @@ public class HomeController {
     //タスク一覧表示用エンドポイント(home.htmlに対応)
     @GetMapping("/list")
     String listItems(Model model) {
+        List<TaskItem> taskItems = dao.findAll();
         model.addAttribute("taskList", taskItems);   //キー：taskList, バリュー：taskItem
         return "home";
     }
@@ -35,7 +45,7 @@ public class HomeController {
                    @RequestParam("deadline") String deadline) {
         String id = UUID.randomUUID().toString().substring(0,8);
         TaskItem item = new TaskItem(id, task, deadline, false);
-        taskItems.add(item);
+        dao.add(item);
 
         return "redirect:/list";
     }
